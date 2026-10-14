@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PawFinder DBMS Project Presentation</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: #0f172a;
+      color: #f8fafc;
+      overflow: hidden;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .deck-container {
+      flex: 1;
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .slide {
+      position: absolute;
+      width: 85%;
+      max-width: 1100px;
+      height: 80%;
+      max-height: 680px;
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 20px;
+      padding: 48px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      display: none;
+      flex-direction: column;
+      justify-content: space-between;
+      animation: fadeIn 0.3s ease-in-out;
+    }
+    .slide.active {
+      display: flex;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .slide-header {
+      border-bottom: 2px solid #334155;
+      padding-bottom: 16px;
+      margin-bottom: 20px;
+    }
+    .slide-tag {
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #f59e0b;
+      margin-bottom: 6px;
+    }
+    .slide-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #ffffff;
+    }
+    .slide-content {
+      flex: 1;
+      overflow-y: auto;
+      font-size: 18px;
+      line-height: 1.6;
+      color: #cbd5e1;
+    }
+    .slide-content ul {
+      margin-left: 28px;
+      margin-top: 12px;
+    }
+    .slide-content li {
+      margin-bottom: 12px;
+    }
+    .slide-content code, pre {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      background: #090d16;
+      color: #38bdf8;
+      border-radius: 8px;
+    }
+    pre {
+      padding: 16px;
+      margin: 16px 0;
+      font-size: 14px;
+      line-height: 1.45;
+      overflow-x: auto;
+      border: 1px solid #1e293b;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+      font-size: 15px;
+    }
+    th, td {
+      border: 1px solid #334155;
+      padding: 10px 14px;
+      text-align: left;
+    }
+    th {
+      background: #0f172a;
+      color: #f59e0b;
+      font-weight: 600;
+    }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    .card {
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      padding: 16px;
+    }
+    .card-title {
+      font-weight: 700;
+      color: #f59e0b;
+      margin-bottom: 8px;
+    }
+    .nav-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 32px;
+      background: #0b1120;
+      border-top: 1px solid #1e293b;
+    }
+    .nav-controls button {
+      background: #f59e0b;
+      color: #0f172a;
+      border: none;
+      padding: 8px 20px;
+      font-weight: 700;
+      font-size: 14px;
+      border-radius: 9999px;
+      cursor: pointer;
+      margin-left: 8px;
+      transition: background 0.2s;
+    }
+    .nav-controls button:hover {
+      background: #fbbf24;
+    }
+    .slide-counter {
+      font-weight: 600;
+      font-size: 14px;
+      color: #64748b;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="deck-container">
+
+    <!-- Slide 1 -->
+    <div class="slide active">
+      <div class="slide-header">
+        <span class="slide-tag">DBMS Academic Project Presentation</span>
+        <h1 class="slide-title">🐾 PawFinder</h1>
+      </div>
+      <div class="slide-content" style="display:flex; flex-direction:column; justify-content:center;">
+        <h2 style="font-size: 26px; color:#f59e0b; margin-bottom: 12px;">Community Pet Adoption & Foster Management System</h2>
+        <p style="font-size: 18px; color: #94a3b8; margin-bottom: 24px;">A robust relational database implementation demonstrating 3NF/BCNF normalization, foreign key cascades, domain check constraints, and SQL views.</p>
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-title">Database Technology</div>
+            <p>PostgreSQL 15+ (Hosted on Supabase)<br>Relational integrity, cascading actions & SQL view</p>
+          </div>
+          <div class="card">
+            <div class="card-title">Application Layer</div>
+            <p>Next.js 16 (App Router) + TypeScript + Tailwind CSS<br>End-to-end typed queries & interactive workflows</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 2 -->
+    <div class="slide">
+      <div class="slide-header">
+        <span class="slide-tag">System Context</span>
+        <h1 class="slide-title">Problem Statement & Motivation</h1>
+      </div>
+      <div class="slide-content">
+        <ul>
+          <li><strong>Disorganized Adoption Pipelines</strong>: Adoptions managed over social media or messaging lack structured relational tracking.</li>
+          <li><strong>Referential Integrity Failures</strong>: When listings are deleted or users leave, existing inquiries become orphaned without DBMS constraints.</li>
+          <li><strong>Data Redundancy</strong>: Repeatedly storing freeform species names leads to update and deletion anomalies.</li>
+          <li><strong>The PawFinder Objective</strong>: Design a strictly normalized relational database system that models pet listings, species categories, and adoption transactions with database-level integrity enforcement.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Slide 3 -->
+    <div class="slide">
+      <div class="slide-header">
+        <span class="slide-tag">Architecture</span>
+        <h1 class="slide-title">System Architecture</h1>
+      </div>
+      <div class="slide-content">
+        <div class="card" style="margin-bottom: 16px;">
+          <div class="card-title">Three-Tier Architecture</div>
+          <p><strong>1. Presentation Tier</strong>: Next.js 16 Client & Server components for catalog exploration, modal forms, and approvals.</p>
+          <p><strong>2. Application / Client Tier</strong>: TypeScript-based data access layer utilizing Supabase client library with typed schema models.</p>
+          <p><strong>3. Database Tier</strong>: PostgreSQL engine enforcing relational integrity constraints, cascades, domain checks, and query projections.</p>
+        </div>
+        <pre>
+┌───────────────────────────────────────┐
+│ Next.js 16 UI Layer (Client & Server) │
+└──────────────────┬────────────────────┘
+                   │ Typed PostgREST queries
+                   ▼
+┌───────────────────────────────────────┐
+│ PostgreSQL Engine (Supabase Cloud)    │
+│  - 4 Relational Tables (BCNF)         │
+│  - Foreign Keys with CASCADE          │
+│  - CHECK & UNIQUE Constraints         │
+│  - Active Inventory Relational View   │
+└───────────────────────────────────────┘
+        </pre>
+      </div>
+    </div>
+
+    <!-- Slide 4 -->
+    <div class="slide">
+      <div class="slide-header">
+        <span class="slide-tag">Conceptual Modeling</span>
+        <h1 class="slide-title">Entity-Relationship (ER) Design</h1>
+      </div>
+      <div class="slide-content">
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-title">Core Entities</div>
+            <ul>
+              <li><strong>USERS</strong>: Identity, contact, city</li>
+              <li><strong>SPECIES</strong>: Standardized taxonomy</li>
+              <li><strong>PETS</strong>: Animals available for adoption</li>
+              <li><strong>ADOPTION_REQUESTS</strong>: Transactional requests</li>
+            </ul>
+          </div>
+          <div class="card">
+            <div class="card-title">Cardinalities & Relationships</div>
+            <ul>
+              <li><code>USERS</code> ──(1 : N)──> <code>PETS</code></li>
+              <li><code>SPECIES</code> ──(1 : N)──> <code>PETS</code></li>
+              <li><code>USERS</code> ──(1 : N)──> <code>ADOPTION_REQUESTS</code></li>
+              <li><code>PETS</code> ──(1 : N)──> <code>ADOPTION_REQUESTS</code></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 5 -->
+    <div class="slide">
+      <div class="slide-header">
+        <span class="slide-tag">Logical Schema</span>
+        <h1 class="slide-title">Relational Schema & Constraints</h1>
+      </div>
+      <div class="slide-content">
+        <table>
+          <thead>
+            <tr>
+              <th>Table</th>
+              <th>Primary Key</th>
+              <th>Foreign Keys</th>
+              <th>Key Constraints</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>users</strong></td>
+              <td>user_id</td>
+              <td>None</td>
+              <td>email UNIQUE NOT NULL</td>
+            </tr>
+            <tr>
+              <td><strong>species</strong></td>
+              <td>species_id</td>
+              <td>None</td>
+              <td>species_name UNIQUE NOT NULL</td>
+            </tr>
+            <tr>
+              <td><strong>pets</strong></td>
+              <td>pet_id</td>
+              <td>owner_id, species_id</td>
+              <td>status IN ('Available','Adopted','Pending'), age_months >= 0, ON DELETE CASCADE</td>
+            </tr>
+            <tr>
+              <td><strong>adoption_requests</strong></td>
+              <td>request_id</td>
+              <td>pet_id, adopter_id</td>
+              <td>status IN ('Pending','Approved','Rejected','Completed'), ON DELETE CASCADE</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Slide 6 -->
+    <div class="slide">
+      <div class="slide-header">
+        <span class="slide-tag">Database Normalization</span>
+        <h1 class="slide-title">Normalization (1NF → 3NF / BCNF)</h1>
+      </div>
+      <div class="slide-content">
+        <div class="card" style="margin-bottom: 12px;">
+          <div class="card-title">1NF & 2NF Compliance</div>
+          <p>Every attribute is atomic. Single-column primary keys guarantee no partial functional dependencies.</p>
+        </div>
+        <div class="card">
+          <div class="card-title">3NF & BCNF Derivation</div>
+          <p>If species were kept in <code>PETS</code>, a transitive dependency would exist:</p>
+          <pre>pet_id → species_name (via species_id → species_name)</pre>
+          <p>By extracting <code>SPECIES</code> into its own relation, all transitive dependencies are eliminated. For every non-trivial FD <strong>X → Y</strong>, <strong>X</strong> is a superkey, achieving <strong>Boyce-Codd Normal Form (BCNF)</strong>.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 7 -->
+    <div class="slide">
+      <div class="slide-header">
+        <span class="slide-tag">Advanced SQL</span>
+        <h1 class="slide-title">Relational Views & Analytics</h1>
+      </div>
+      <div class="slide-content">
+        <p>A relational view decouples the client from multi-table join complexity:</p>
+        <pre>
+CREATE OR REPLACE VIEW available_pets AS
+SELECT 
+    p.pet_id,
+    p.name,
+    s.species_name,
+    p.breed,
+    p.age_months,
+    p.status,
+    u.full_name AS owner_name,
+    u.email AS owner_email
+FROM pets p
+JOIN species s ON p.species_id = s.species_id
+JOIN users u ON p.owner_id = u.user_id;
+        </pre>
+      </div>
+    </div>
+
+    <!-- Slide 8 -->
+    <div class="slide">
+      <div class="slide-header">
+        <span class="slide-tag">Live Demonstration</span>
+        <h1 class="slide-title">Application Workflows</h1>
+      </div>
+      <div class="slide-content">
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-title">1. Catalog & Filtering</div>
+            <p>Browse available pets filtered dynamically by species (Dog, Cat, Bird, Rabbit) with instant result counts.</p>
+          </div>
+          <div class="card">
+            <div class="card-title">2. Persona Switcher</div>
+            <p>Switch active users without authentication friction to test owner vs adopter capabilities.</p>
+          </div>
+          <div class="card">
+            <div class="card-title">3. Adoption Application</div>
+            <p>Submit adoption requests with preferred pickup dates and home suitability notes.</p>
+          </div>
+          <div class="card">
+            <div class="card-title">4. Requests Dashboard</div>
+            <p>Owners review, approve, or reject incoming requests; mark completed adoptions with automated timestamps.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 9 -->
+    <div class="slide">
+      <div class="slide-header">
+        <span class="slide-tag">Summary</span>
+        <h1 class="slide-title">Conclusion & Q&A</h1>
+      </div>
+      <div class="slide-content" style="display:flex; flex-direction:column; justify-content:center;">
+        <h2 style="color:#f59e0b; margin-bottom: 16px;">Key Project Highlights</h2>
+        <ul>
+          <li><strong>Pure Relational Model</strong>: Fully normalized to BCNF with zero redundancy.</li>
+          <li><strong>Enforced Integrity</strong>: Declarative foreign key cascades and domain check constraints.</li>
+          <li><strong>Production-Grade Delivery</strong>: Complete TypeScript-typed Next.js 16 application verified with successful build.</li>
+        </ul>
+        <p style="margin-top: 32px; font-size: 20px; font-weight: 700; color: #ffffff;">Thank you! Any Questions?</p>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="nav-bar">
+    <div class="slide-counter" id="counter">Slide 1 of 9</div>
+    <div class="nav-controls">
+      <button id="prevBtn" onclick="prevSlide()">← Previous</button>
+      <button id="nextBtn" onclick="nextSlide()">Next →</button>
+    </div>
+  </div>
+
+  <script>
+    const slides = document.querySelectorAll('.slide');
+    let currentIndex = 0;
+
+    function showSlide(index) {
+      slides.forEach((s, i) => s.classList.toggle('active', i === index));
+      document.getElementById('counter').innerText = `Slide ${index + 1} of ${slides.length}`;
+      document.getElementById('prevBtn').disabled = (index === 0);
+      document.getElementById('nextBtn').disabled = (index === slides.length - 1);
+    }
+
+    function nextSlide() {
+      if (currentIndex < slides.length - 1) {
+        currentIndex++;
+        showSlide(currentIndex);
+      }
+    }
+
+    function prevSlide() {
+      if (currentIndex > 0) {
+        currentIndex--;
+        showSlide(currentIndex);
+      }
+    }
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ') nextSlide();
+      if (e.key === 'ArrowLeft') prevSlide();
+    });
+
+    showSlide(0);
+  </script>
+</body>
+</html>

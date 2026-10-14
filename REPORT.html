@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>DBMS Project Report — PawFinder Pet Adoption Hub</title>
+  <style>
+    @media print {
+      body { font-size: 11pt; line-height: 1.5; color: #000; background: #fff; }
+      .page-break { page-break-before: always; }
+      .no-print { display: none; }
+      a { text-decoration: none; color: #000; }
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.6;
+      color: #1e293b;
+      background: #f8fafc;
+      padding: 40px 20px;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: #ffffff;
+      padding: 60px 80px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+      border-radius: 12px;
+    }
+    h1, h2, h3, h4 { color: #0f172a; font-weight: 700; margin-top: 1.5em; margin-bottom: 0.5em; }
+    h1 { font-size: 28pt; border-bottom: 3pt solid #f59e0b; padding-bottom: 12px; margin-top: 0; }
+    h2 { font-size: 18pt; border-bottom: 1pt solid #e2e8f0; padding-bottom: 6px; }
+    h3 { font-size: 14pt; color: #d97706; }
+    p { margin-bottom: 1em; }
+    table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 10.5pt; }
+    th, td { border: 1px solid #cbd5e1; padding: 10px 12px; text-align: left; }
+    th { background: #f1f5f9; color: #0f172a; font-weight: 600; }
+    pre {
+      background: #0f172a;
+      color: #38bdf8;
+      padding: 16px;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-size: 9.5pt;
+      line-height: 1.45;
+      font-family: ui-monospace, Menlo, Consolas, monospace;
+      margin: 16px 0;
+    }
+    code { font-family: ui-monospace, Menlo, Consolas, monospace; background: #e2e8f0; padding: 2px 6px; border-radius: 4px; font-size: 9pt; }
+    pre code { background: transparent; padding: 0; }
+    .badge { display: inline-block; background: #fef3c7; color: #b45309; padding: 4px 10px; border-radius: 9999px; font-weight: 600; font-size: 9pt; }
+    .meta-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px; margin: 24px 0; }
+    .meta-item { margin-bottom: 6px; font-size: 10pt; }
+    .meta-item strong { color: #475569; }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div style="text-align: right; margin-bottom: 20px;">
+      <span class="badge">DBMS Academic Project</span>
+    </div>
+
+    <h1>PawFinder</h1>
+    <h2 style="border:none; margin-top: 0; color: #64748b; font-weight: 500; font-size: 16pt;">
+      Community Pet Adoption & Foster Management System
+    </h2>
+
+    <div class="meta-box">
+      <div class="meta-item"><strong>Course:</strong> Database Management Systems (DBMS)</div>
+      <div class="meta-item"><strong>Topic:</strong> Relational Database Design, Normalization (3NF/BCNF), & Integrity Constraints</div>
+      <div class="meta-item"><strong>Technology Stack:</strong> PostgreSQL 15+ (Supabase), Next.js 16 (App Router), TypeScript, Tailwind CSS v4</div>
+      <div class="meta-item"><strong>Deliverables:</strong> Relational DDL, SQL Views, Seed Scripts, Full-Stack Prototype, Presentation Deck</div>
+    </div>
+
+    <h2>1. Executive Summary</h2>
+    <p>
+      PawFinder is a full-stack database application designed to streamline community pet adoption and foster workflows. The primary objective of this project is to apply theoretical relational database concepts—specifically <strong>Boyce-Codd Normal Form (BCNF)</strong>, declarative integrity constraints (<code>CHECK</code>, <code>UNIQUE</code>, <code>NOT NULL</code>), referential integrity actions (<code>ON DELETE CASCADE</code>), and relational database views—to a real-world multi-user application.
+    </p>
+
+    <h2>2. Entity-Relationship (ER) Modeling</h2>
+    <p>The system is modeled around four core entities that capture the operational lifecycle of a pet adoption exchange:</p>
+    <ul>
+      <li><strong>USERS</strong>: Represents both pet owners and prospective adopters.</li>
+      <li><strong>SPECIES</strong>: Standardized taxonomy classifying pet types (Dog, Cat, Bird, Rabbit).</li>
+      <li><strong>PETS</strong>: The focal resource containing age, breed, description, and status.</li>
+      <li><strong>ADOPTION_REQUESTS</strong>: Transactional records capturing adoption applications, requested handover dates, and home details.</li>
+    </ul>
+
+    <h3>Entity Relationship Diagram (ERD)</h3>
+    <pre>
+  +------------------+                    +------------------+
+  |      USERS       |                    |     SPECIES      |
+  +------------------+                    +------------------+
+  | PK  user_id      |                    | PK  species_id   |
+  |     full_name    |                    |     species_name |
+  |     email [UQ]   |                    +------------------+
+  |     city         |                             | 1
+  |     created_at   |                             |
+  +------------------+                             | classifies (1:N)
+          | 1                                      |
+          |                                        |
+          | lists (1:N)                            |
+          +-----------------------+                |
+                                  |                |
+                                  v N              v N
+                          +-------------------------------+
+                          |             PETS              |
+                          +-------------------------------+
+                          | PK  pet_id                    |
+                          | FK  owner_id                  |
+                          | FK  species_id                |
+                          |     name                      |
+                          |     breed                     |
+                          |     age_months                |
+                          |     description               |
+                          |     status                    |
+                          |     created_at                |
+                          +-------------------------------+
+                                          | 1
+                                          |
+                                          | receives (1:N)
+                                          v N
+                          +-------------------------------+
+                          |       ADOPTION_REQUESTS       |
+                          +-------------------------------+
+                          | PK  request_id                |
+                          | FK  pet_id                    |
+                          | FK  adopter_id                |
+                          |     status                    |
+                          |     requested_at              |
+                          |     completed_at              |
+                          |     preferred_date            |
+                          |     home_description          |
+                          +-------------------------------+
+                                          ^ N
+                                          |
+                                          | submits (1:N)
+                                          | 1
+                                  +------------------+
+                                  |      USERS       |
+                                  +------------------+
+    </pre>
+
+    <div class="page-break"></div>
+
+    <h2>3. Relational Schema & Normalization Analysis</h2>
+
+    <h3>3.1 Normalization Derivation</h3>
+    <p>
+      A common anti-pattern in naive adoption platforms is storing freeform species names directly within the <code>pets</code> relation. Consider the unnormalized dependency:
+    </p>
+    <pre>pet_id -> name, breed, species_name, owner_id</pre>
+    <p>
+      This structure exhibits both update and deletion anomalies. If all dogs in the database are adopted and deleted, the classification "Dog" would be inadvertently purged from the system.
+    </p>
+    <p>
+      <strong>Decomposition to BCNF:</strong> The schema was decomposed into <code>pets</code> and <code>species</code>. The functional dependencies for each table are:
+    </p>
+    <ul>
+      <li><code>species_id -> species_name</code> (Where <code>species_id</code> is candidate key)</li>
+      <li><code>user_id -> full_name, email, city, created_at</code> (Where <code>user_id</code> is candidate key)</li>
+      <li><code>pet_id -> owner_id, species_id, name, breed, age_months, status</code> (Where <code>pet_id</code> is candidate key)</li>
+      <li><code>request_id -> pet_id, adopter_id, status, preferred_date, home_description</code> (Where <code>request_id</code> is candidate key)</li>
+    </ul>
+    <p>
+      Since for every non-trivial functional dependency \( X \rightarrow Y \), \( X \) is a superkey, the entire database satisfies <strong>Boyce-Codd Normal Form (BCNF)</strong>.
+    </p>
+
+    <h2>4. Data Definition Language (DDL) Implementation</h2>
+    <p>The following SQL DDL defines the relational tables and integrity constraints:</p>
+    <pre>
+-- 1. USERS
+CREATE TABLE IF NOT EXISTS users (
+    user_id SERIAL PRIMARY KEY,
+    full_name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    city VARCHAR(50) NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 2. SPECIES
+CREATE TABLE IF NOT EXISTS species (
+    species_id SERIAL PRIMARY KEY,
+    species_name VARCHAR(50) NOT NULL UNIQUE
+);
+
+-- 3. PETS
+CREATE TABLE IF NOT EXISTS pets (
+    pet_id SERIAL PRIMARY KEY,
+    owner_id INT NOT NULL,
+    name VARCHAR(150) NOT NULL,
+    species_id INT NOT NULL,
+    breed VARCHAR(80),
+    age_months INT CHECK (age_months >= 0),
+    description TEXT,
+    status VARCHAR(20) DEFAULT 'Available' 
+        CHECK (status IN ('Available', 'Adopted', 'Pending')),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_owner FOREIGN KEY (owner_id) REFERENCES users(user_id) ON DELETE CASCADE,
+    CONSTRAINT fk_species FOREIGN KEY (species_id) REFERENCES species(species_id) ON DELETE CASCADE
+);
+
+-- 4. ADOPTION REQUESTS
+CREATE TABLE IF NOT EXISTS adoption_requests (
+    request_id SERIAL PRIMARY KEY,
+    pet_id INT NOT NULL,
+    adopter_id INT NOT NULL,
+    status VARCHAR(20) DEFAULT 'Pending' 
+        CHECK (status IN ('Pending', 'Approved', 'Rejected', 'Completed')),
+    requested_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    completed_at TIMESTAMP WITH TIME ZONE NULL,
+    preferred_date DATE NULL,
+    home_description TEXT NULL,
+    CONSTRAINT fk_pet FOREIGN KEY (pet_id) REFERENCES pets(pet_id) ON DELETE CASCADE,
+    CONSTRAINT fk_adopter FOREIGN KEY (adopter_id) REFERENCES users(user_id) ON DELETE CASCADE
+);
+    </pre>
+
+    <h2>5. Relational SQL Views</h2>
+    <p>
+      A database view was created to simplify reporting and eliminate join duplication in client components:
+    </p>
+    <pre>
+CREATE OR REPLACE VIEW available_pets AS
+SELECT 
+    p.pet_id,
+    p.name,
+    s.species_name,
+    p.breed,
+    p.age_months,
+    p.status,
+    u.full_name AS owner_name,
+    u.email AS owner_email
+FROM pets p
+JOIN species s ON p.species_id = s.species_id
+JOIN users u ON p.owner_id = u.user_id;
+    </pre>
+
+    <h2>6. Test Cases & Verification Matrix</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Test ID</th>
+          <th>Test Scenario</th>
+          <th>Constraint Tested</th>
+          <th>Observed Result</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>TC-01</td>
+          <td>Insert duplicate email into <code>users</code></td>
+          <td><code>UNIQUE (email)</code></td>
+          <td>Rejected: 23505 unique violation</td>
+        </tr>
+        <tr>
+          <td>TC-02</td>
+          <td>Insert pet with negative age (-3)</td>
+          <td><code>CHECK (age_months >= 0)</code></td>
+          <td>Rejected: 23514 check violation</td>
+        </tr>
+        <tr>
+          <td>TC-03</td>
+          <td>Insert invalid pet status ('Reserved')</td>
+          <td><code>CHECK (status IN (...))</code></td>
+          <td>Rejected: 23514 check violation</td>
+        </tr>
+        <tr>
+          <td>TC-04</td>
+          <td>Delete user who owns active listings</td>
+          <td><code>ON DELETE CASCADE</code></td>
+          <td>Cascade Success: Associated pets removed</td>
+        </tr>
+        <tr>
+          <td>TC-05</td>
+          <td>Application Production Compilation</td>
+          <td>Next.js 16 Compiler</td>
+          <td>Build Passed (0 errors, 4/4 routes)</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>7. Conclusion</h2>
+    <p>
+      The PawFinder project provides an end-to-end realization of database management system principles. By strictly enforcing domain constraints, referential integrity with cascading deletions, and 3NF/BCNF normalization, the system provides guaranteed data integrity and zero redundancy across the pet adoption lifecycle.
+    </p>
+  </div>
+
+</body>
+</html>
